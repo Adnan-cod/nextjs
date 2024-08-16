@@ -2,8 +2,8 @@ import Image from "next/image";
 import styles from "./singlePost.module.css";
 
 import { Suspense } from "react";
-import { getPost } from "../../../lib/data";
-import PostUser from "../../../components/postUser/postUser";
+import { getPost } from "@/lib/data";
+import PostUser from "@/components/postUser/postUser";
 
 const SinglePostPage = async ({ params }) => {
   console.log("params", params);
