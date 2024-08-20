@@ -4,11 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { connectToDb } from "./utils";
 import { User } from "./models";
 import bcrypt from "bcryptjs";
-import { authConfig } from "./auth.config";
+import { authConfig } from "./auth.config.js";
 
 const login = async (credentials) => {
   try {
-    connectToDb();
+    await connectToDb();
     const user = await User.findOne({ username: credentials.username });
 
     if (!user) throw new Error("Wrong credentials!");
@@ -27,20 +27,14 @@ const login = async (credentials) => {
   }
 };
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
-  ...authConfig,
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
     CredentialsProvider({
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         try {
           const user = await login(credentials);
           return user;
@@ -48,10 +42,19 @@ export const {
           return null;
         }
       },
+      credentials: undefined,
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({
+      user,
+      account,
+      profile,
+    }: {
+      user: any;
+      account: any;
+      profile: any;
+    }) {
       if (account.provider === "github") {
         connectToDb();
         try {
@@ -59,7 +62,7 @@ export const {
 
           if (!user) {
             const newUser = new User({
-              username: profile.login,
+              username: profile.name,
               email: profile.email,
               image: profile.avatar_url,
             });

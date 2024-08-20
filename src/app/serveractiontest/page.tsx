@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { addPost, deletePost } from "@/lib/actions";
+import { addPost, deletePost } from "@/lib/action";
 
 const ServerActionPage = () => {
   return (
