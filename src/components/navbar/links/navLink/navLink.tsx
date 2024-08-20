@@ -1,20 +1,20 @@
 "use client";
-import React from "react";
+
 import Link from "next/link";
-import styles from "./navlink.module.css";
+import styles from "./navLink.module.css";
 import { usePathname } from "next/navigation";
 
-const NavLink = (prop) => {
+const NavLink = ({ item }) => {
   const pathName = usePathname();
 
   return (
     <Link
-      href={prop.item.path}
+      href={item.path}
       className={`${styles.container} ${
-        pathName === prop.item.path && styles.active
-      } `}
+        pathName === item.path && styles.active
+      }`}
     >
-      {prop.item.title}
+      {item.title}
     </Link>
   );
 };
